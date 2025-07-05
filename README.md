@@ -1,1 +1,1 @@
-# AMS
+Mini Account Management System
