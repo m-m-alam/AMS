@@ -1,0 +1,59 @@
+﻿@model AMS.Web.Models.EditUserRolesViewModel
+
+@{
+    ViewData["Title"] = "Edit User Roles";
+}
+
+<h1>Edit Roles for @Model.UserName</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="EditUserRoles" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="UserName" />
+
+            <div class="form-group">
+                <label>Current Roles:</label>
+                <ul>
+                    @if (Model.UserRoles != null && Model.UserRoles.Any())
+                    {
+                        @foreach (var role in Model.UserRoles)
+                        {
+                            <li>@role</li>
+                        }
+                    }
+                    else
+                    {
+                        <li>No roles assigned.</li>
+                    }
+                </ul>
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Assign/Remove Roles:</label>
+                @foreach (var role in Model.AllRoles)
+                {
+                    <div class="form-check">
+                        <input type="checkbox"
+                               class="form-check-input"
+                               name="SelectedRoles"
+                               value="@role"
+                               @(Model.UserRoles.Contains(role) ? "checked" : "") />
+                        <label class="form-check-label">@role</label>
+                    </div>
+                }
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="ManageUsers" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

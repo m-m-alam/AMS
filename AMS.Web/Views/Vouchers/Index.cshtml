@@ -1,0 +1,75 @@
+﻿@model List<Voucher>
+@{
+    ViewData["Title"] = "Vouchers";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="fas fa-receipt"></i> Vouchers</h2>
+    <div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create Voucher
+        </a>
+        <button class="btn btn-success" onclick="exportToExcel()">
+            <i class="fas fa-file-excel"></i> Export to Excel
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Voucher Number</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Reference</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var voucher in Model.OrderByDescending(v => v.VoucherDate))
+                    {
+                        <tr>
+                            <td><strong>@voucher.VoucherNumber</strong></td>
+                            <td>@voucher.VoucherDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <span class="badge bg-primary">@voucher.VoucherType?.TypeName</span>
+                            </td>
+                            <td>@voucher.ReferenceNo</td>
+                            <td>@voucher.Description</td>
+                            <td class="text-end">@voucher.TotalAmount.ToString("C")</td>
+                            <td>
+                                @if ((bool)voucher.IsPosted)
+                                {
+                                    <span class="badge bg-success">Posted</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">Draft</span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@voucher.Id" class="btn btn-sm btn-outline-info">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function exportToExcel() {
+            window.location.href = '@Url.Action("ExportToExcel", "Vouchers")';
+        }
+    </script>
+}

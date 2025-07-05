@@ -1,0 +1,152 @@
+﻿@model AMS.Web.ViewModels.VoucherViewModel
+@{
+    ViewData["Title"] = "Create Voucher";
+}
+
+<h2><i class="fas fa-plus"></i> Create Voucher</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Create" method="post" id="voucherForm">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label asp-for="VoucherNumber" class="form-label"></label>
+                                <input asp-for="VoucherNumber" class="form-control" required />
+                                <span asp-validation-for="VoucherNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label asp-for="VoucherDate" class="form-label"></label>
+                                <input asp-for="VoucherDate" class="form-control" type="date" required />
+                                <span asp-validation-for="VoucherDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label asp-for="VoucherTypeId" class="form-label"></label>
+                                <select asp-for="VoucherTypeId" class="form-select" required>
+                                    <option value="">Select Type</option>
+                                    @foreach (var type in Model.VoucherTypes)
+                                    {
+                                        <option value="@type.Id">@type.TypeName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="VoucherTypeId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label asp-for="ReferenceNo" class="form-label"></label>
+                                <input asp-for="ReferenceNo" class="form-control" />
+                                <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <h5>Voucher Details</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="voucherDetailsTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="40%">Account</th>
+                                    <th width="20%">Debit</th>
+                                    <th width="20%">Credit</th>
+                                    <th width="15%">Description</th>
+                                    <th width="5%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="voucherDetailsBody">
+                                @for (int i = 0; i < Model.Details.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <select name="Details[@i].AccountId" class="form-select" required>
+                                                <option value="">Select Account</option>
+                                                @foreach (var account in Model.Accounts.Where(a => (bool)a.IsActive))
+                                                {
+                                                    <option value="@account.Id">@account.AccountCode - @account.AccountName</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input name="Details[@i].DebitAmount" type="number" step="0.01" class="form-control debit-amount" />
+                                        </td>
+                                        <td>
+                                            <input name="Details[@i].CreditAmount" type="number" step="0.01" class="form-control credit-amount" />
+                                        </td>
+                                        <td>
+                                            <input name="Details[@i].Description" class="form-control" />
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm remove-row">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-info">
+                                    <td><strong>Totals</strong></td>
+                                    <td><strong id="totalDebits">0.00</strong></td>
+                                    <td><strong id="totalCredits">0.00</strong></td>
+                                    <td colspan="2">
+                                        <button type="button" class="btn btn-success btn-sm" id="addRowBtn">
+                                            <i class="fas fa-plus"></i> Add Row
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Voucher
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        let rowIndex = @Model.Details.Count;
+
+        $(document).ready(function() {
+            updateTotals();
+
+            $('#addRowBtn').click(function() {
+                addNewRow();
+            });
+
+            $(document).on('click', '.remove-row', function () {
+                if ($('#voucId INT IDENTITY(1,1) PRIMARY KEY,
+    AccountCode NVARCHAR(20) NOT NULL UNIQUE,
+                    AccountName NVARCHAR(100) NOT NULL,
+                    AccountType NVARCHAR(50) NOT NULL, --Asset, Liability, Equity, Revenue, Expense
+    ParentAccountId INT NULL,
+                    IsActive BIT DEFAULT 1,
+                    CreatedDate DATETIME2 DEFAULT GETDATE(),
+                    CreatedBy NVARCHAR(450),
+                    FOREIGN KEY(ParentAccountId) REFERENCES ChartOfAccounts(Id)
+                )}
+    *@

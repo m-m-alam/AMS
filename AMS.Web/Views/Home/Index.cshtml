@@ -1,0 +1,118 @@
+﻿<!-- Views/Home/Index.cshtml -->
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="display-4">Welcome to Account Management System</h1>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>@ViewBag.TotalAccounts</h4>
+                                    <p>Total Accounts</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-list fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>@ViewBag.ActiveAccounts</h4>
+                                    <p>Active Accounts</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>@ViewBag.TotalVouchers</h4>
+                                    <p>Total Vouchers</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-receipt fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-dark">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>5</h4>
+                                    <p>Recent Entries</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <a href="@Url.Action("Create", "ChartOfAccounts")" class="btn btn-primary btn-lg btn-block mb-2">
+                                <i class="fas fa-plus"></i> Add New Account
+                            </a>
+                            <a href="@Url.Action("Create", "Vouchers")" class="btn btn-success btn-lg btn-block">
+                                <i class="fas fa-plus"></i> Create Voucher
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Recent Vouchers</h5>
+                        </div>
+                        <div class="card-body">
+                            @if (ViewBag.RecentVouchers != null)
+                            {
+                                @foreach (var voucher in (List<Voucher>)ViewBag.RecentVouchers)
+                                {
+                                    <div class="border-bottom py-2">
+                                        <strong>@voucher.VoucherNumber</strong> - @voucher.VoucherDate.ToString("MMM dd, yyyy")
+                                        <br>
+                                        <small class="text-muted">@voucher.Description</small>
+                                        <span class="badge bg-secondary float-end">@voucher.TotalAmount.ToString("C")</span>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>Please <a asp-area="Identity" asp-page="/Account/Login">login</a> to access the system.</p>
+        }
+    </div>
+</div>
